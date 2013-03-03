@@ -47,7 +47,7 @@ def str2json(string):
 def get_value(attr_value):
     if attr_value is None:
         return attr_value
-    if isinstance(attr_value, (int, basestring)):
+    if isinstance(attr_value, (int, basestring, float, long, complex, bool)):
         return attr_value
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
