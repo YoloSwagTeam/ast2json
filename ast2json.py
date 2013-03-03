@@ -53,7 +53,8 @@ def get_value(attr_value):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
         return ast2json(attr_value)
-    print attr_value
+    else:
+        raise Exception("unknow case for '%s' of type '%s'" % (attr_value, type(attr_value)))
 
 
 if __name__ == '__main__':
