@@ -50,7 +50,7 @@ def get_value(attr_value):
     if isinstance(attr_value, (int, basestring)):
         return attr_value
     if isinstance(attr_value, list):
-        return [ast2json(x) for x in attr_value]
+        return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
         return ast2json(attr_value)
     print attr_value
