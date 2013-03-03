@@ -29,6 +29,7 @@ from ast import parse
 
 
 def ast2json(node):
+    assert isinstance(node, AST)
     to_return = {}
     to_return['_type'] = node.__class__.__name__
     for attr in dir(node):
