@@ -1,62 +1,30 @@
+from _ast import AST
 from ast import parse
 
 
-def parse_module(module):
-    return [recursive_call(x) for x in module.body]
+def ast_to_json(node):
+    to_return = {}
+    to_return['_type'] = node.__class__.__name__
+    for attr in dir(node):
+        if attr.startswith("_"):
+            continue
+        to_return[attr] = get_value(getattr(node, attr))
+
+    return to_return
 
 
-def parse_tree(tree):
-    return recursive_call(tree)
-
-
-def parse_import(import_node):
-    return {
-        '_type': 'Import',
-        'col_offset': import_node.col_offset,
-        'lineno': import_node.lineno,
-        'names': [recursive_call(x) for x in import_node.names],
-    }
-
-
-def parse_alias(alias):
-    return {
-        '_type': 'alias',
-        'asname': alias.asname,
-        'name': alias.name,
-    }
-
-
-def parse_import_from(import_from):
-    return {
-        '_type': 'ImportFrom',
-        'col_offset': import_from.col_offset,
-        'level': import_from.level,
-        'lineno': import_from.lineno,
-        'module': import_from.module,
-        'names': [recursive_call(x) for x in import_from.names],
-    }
-
-
-function_mapping = {
-    'Module': parse_module,
-    'Import': parse_import,
-    'alias': parse_alias,
-    'ImportFrom': parse_import_from,
-}
-
-
-def unknow_node(node):
-    print node, [node.__class__.__name__]
-    from IPython import embed
-    embed()
-    import sys
-    sys.exit(0)
-
-
-def recursive_call(node):
-    return function_mapping.get(node.__class__.__name__, unknow_node)(node)
+def get_value(attr_value):
+    if attr_value is None:
+        return attr_value
+    if isinstance(attr_value, (int, basestring)):
+        return attr_value
+    if isinstance(attr_value, list):
+        return [ast_to_json(x) for x in attr_value]
+    if isinstance(attr_value, AST):
+        return ast_to_json(attr_value)
+    print attr_value
 
 
 if __name__ == '__main__':
-    from pprint import pprint
-    pprint(parse_tree(parse(open("vodka.py", "r").read())))
+    import json
+    print json.dumps(ast_to_json(parse(open(__file__, "r").read())), indent=4)
