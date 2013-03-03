@@ -5,6 +5,15 @@ ast2json is a small module that will convert any python AST node into its ast
 representation formated in a JSON compatible python representation (list and
 dicts containing string, ints and null).
 
+Installation
+============
+
+::
+
+    pip install ast2json
+    # or to have lastest version
+    pip install git+git://github.com/Psycojoker/ast2json.git
+
 Usage
 =====
 
