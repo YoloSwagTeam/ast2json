@@ -39,6 +39,10 @@ def ast2json(node):
     return to_return
 
 
+def str2json(string):
+    return ast2json(parse(string))
+
+
 def get_value(attr_value):
     if attr_value is None:
         return attr_value
