@@ -1,4 +1,5 @@
 # Copyright (c) 2013, Laurent Peuch <cortex@worlddomination.be>
+# Copyright (c) 2015, Eddy Ernesto del Valle Pino <xigmatron@gmail.com>
 #
 # All rights reserved.
 # Redistribution and use in source and binary forms, with or without
@@ -24,39 +25,43 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import json
+
 from _ast import AST
 from ast import parse
 
 
-def ast2json(node):
-    assert isinstance(node, AST)
-    to_return = {}
-    to_return['_type'] = node.__class__.__name__
+class AstJsonEncoder(json.JSONEncoder):
+
+    def default(self, obj):
+        if isinstance(obj, AST):
+            value = {
+                attr: getattr(obj, attr)
+                for attr in dir(obj)
+                if not attr.startswith('_')
+            }
+            value['node_type'] = obj.__class__.__name__
+            return value
+        return super(AstJsonEncoder, self) .default(obj)
+
+
+def ast2json(node, *args, **kwargs):
+    return AstJsonEncoder(*args, **kwargs).encode(node)
+
+
+def ast2dict(node):
+    result = {}
+    result['node_type'] = node.__class__.__name__
     for attr in dir(node):
-        if attr.startswith("_"):
-            continue
-        to_return[attr] = get_value(getattr(node, attr))
-
-    return to_return
-
-
-def str2json(string):
-    return ast2json(parse(string))
-
-
-def get_value(attr_value):
-    if attr_value is None:
-        return attr_value
-    if isinstance(attr_value, (int, basestring, float, long, complex, bool)):
-        return attr_value
-    if isinstance(attr_value, list):
-        return [get_value(x) for x in attr_value]
-    if isinstance(attr_value, AST):
-        return ast2json(attr_value)
-    else:
-        raise Exception("unknow case for '%s' of type '%s'" % (attr_value, type(attr_value)))
+        if not attr.startswith("_"):
+            value = getattr(node, attr)
+            if isinstance(value, AST):
+                value = ast2dict(value)
+            elif isinstance(value, list):
+                value = [ast2dict(n) for n in value]
+            result[attr] = value
+    return result
 
 
 if __name__ == '__main__':
-    import json
-    print json.dumps(ast2json(parse(open(__file__, "r").read())), indent=4)
+    print(ast2json(parse(open(__file__, "r").read()), indent=4))
