@@ -27,6 +27,7 @@ Usage
 If you want just the dict use:
 
 ::
+
     >>> from ast2json import ast2dict
     >>> str2dict(open('some_python_source_file.py').read())
 
