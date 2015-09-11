@@ -19,37 +19,35 @@ Usage
 
 ::
 
-    >>> import json
     >>> from ast import parse
     >>> from ast2json import ast2json
 
-    >>> ast = ast2json(parse(open('some_python_source_file.py').read()))
-    >>> print json.dumps(ast, indent=4)
+    >>> print(ast2json(parse(open('some_python_source_file.py').read(), indent=4))
 
-If you are lazy, "str2json" will apply the "parse" method of ast on a string for you, so you'll be able to write:
+If you want just the dict use:
 
 ::
-
-    >>> str2json(open('some_python_source_file.py').read())
+    >>> from ast2json import ast2dict
+    >>> str2dict(open('some_python_source_file.py').read())
 
 Example
 =======
 
-This is the result of converting 'print "Hello World!"' (and applying json.dumps on the result).
+This is the result of converting 'print("Hello World!")'.
 
 ::
 
     {
         "body": [
             {
-                "_type": "Print", 
+                "node_type": "Print", 
                 "nl": true, 
                 "col_offset": 0, 
                 "dest": null, 
                 "values": [
                     {
                         "s": "Hello World!", 
-                        "_type": "Str", 
+                        "node_type": "Str", 
                         "lineno": 1, 
                         "col_offset": 6
                     }
@@ -57,7 +55,7 @@ This is the result of converting 'print "Hello World!"' (and applying json.dumps
                 "lineno": 1
             }
         ], 
-        "_type": "Module"
+        "node_type": "Module"
     }
 
 
