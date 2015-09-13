@@ -51,9 +51,9 @@ def ast2json(node, *args, **kwargs):
 
 def ast2dict(node):
     result = {}
-    result['node_type'] = node.__class__.__name__
+    result['node_type'] = node.__class__.__name__.lower()
     for attr in dir(node):
-        if not attr.startswith("_"):
+        if not attr.startswith("_") and attr not in ('lineno', 'col_offset'):
             value = getattr(node, attr)
             if isinstance(value, AST):
                 value = ast2dict(value)
@@ -63,5 +63,38 @@ def ast2dict(node):
     return result
 
 
+class Tag:
+
+    def __init__(self, name=None, attrs=None, children=None):
+        self.name = (name or attrs.pop('node_type', '')).lower()
+        self.attrs = {}
+        self.children = [Tag(attrs=child) for child in children or []]
+        for attr, value in (attrs or {}).items():
+            if isinstance(value, list):
+                self.children.append(Tag(name=attr, children=value))
+            elif isinstance(value, dict):
+                self.children.append(Tag(name=attr, children=[value]))
+            else:
+                self.attrs[attr] = value
+
+    def __str__(self):
+        attrs = []
+        for attr, value in self.attrs.items():
+            attrs.append('%(attr)s="%(value)s"' % locals())
+        attrs = ' '.join(attrs)
+        head = '%(name)s %(attrs)s' % {'name': self.name, 'attrs': attrs}
+        return '<%(head)s>\n%(children)s</%(name)s>' % {
+            'name': self.name,
+            'head': head.strip(),
+            'children': '\n'.join(str(node) for node in self.children) + '\n'
+        }
+
+
+def ast2xml(node):
+    return Tag(attrs=ast2dict(node))
+
+
 if __name__ == '__main__':
-    print(ast2json(parse(open(__file__, "r").read()), indent=4))
+    import yaml
+    import sys
+    print(yaml.dump(ast2dict(parse(open(sys.argv[1]).read()))))
