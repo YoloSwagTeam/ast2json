@@ -68,7 +68,9 @@ class Tag:
     def __init__(self, name=None, attrs=None, children=None):
         self.name = (name or attrs.pop('node_type', '')).lower()
         self.attrs = {}
+
         self.children = [Tag(attrs=child) for child in children or []]
+
         for attr, value in (attrs or {}).items():
             if isinstance(value, list):
                 self.children.append(Tag(name=attr, children=value))
@@ -79,9 +81,12 @@ class Tag:
 
     def __str__(self):
         attrs = []
+
         for attr, value in self.attrs.items():
             attrs.append('%(attr)s="%(value)s"' % locals())
+
         attrs = ' '.join(attrs)
+
         head = '%(name)s %(attrs)s' % {'name': self.name, 'attrs': attrs}
         return '<%(head)s>\n%(children)s</%(name)s>' % {
             'name': self.name,
