@@ -26,6 +26,7 @@
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import json
+import xml.dom.minidom
 
 from _ast import AST
 from ast import parse
@@ -79,7 +80,7 @@ class Tag:
             else:
                 self.attrs[attr] = value
 
-    def __str__(self):
+    def _to_str(self):
         attrs = []
 
         for attr, value in self.attrs.items():
@@ -91,8 +92,11 @@ class Tag:
         return '<%(head)s>\n%(children)s</%(name)s>' % {
             'name': self.name,
             'head': head.strip(),
-            'children': '\n'.join(str(node) for node in self.children) + '\n'
+            'children': '\n    '.join(node._to_str() for node in self.children) + '\n'
         }
+
+    def __str__(self):
+        return xml.dom.minidom.parseString('<?xml version="1.0"?>\n' + self._to_str()).toprettyxml()
 
 
 def ast2xml(node):
