@@ -103,3 +103,4 @@ if __name__ == '__main__':
     import yaml
     import sys
     print(yaml.dump(ast2dict(parse(open(sys.argv[1]).read()))))
+    print(ast2xml(parse(open(sys.argv[1]).read())))
