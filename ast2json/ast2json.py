@@ -26,11 +26,12 @@
 
 from _ast import AST
 from ast import parse
+from .config import *
 
 
 def ast2json(node):
     assert isinstance(node, AST)
-    to_return = {}
+    to_return = dict()
     to_return['_type'] = node.__class__.__name__
     for attr in dir(node):
         if attr.startswith("_"):
@@ -47,16 +48,16 @@ def str2json(string):
 def get_value(attr_value):
     if attr_value is None:
         return attr_value
-    if isinstance(attr_value, (int, basestring, float, long, complex, bool)):
+    if isinstance(attr_value, BUILTIN_TYPES):
         return attr_value
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
         return ast2json(attr_value)
     else:
-        raise Exception("unknow case for '%s' of type '%s'" % (attr_value, type(attr_value)))
+        raise Exception("unknown case for '%s' of type '%s'" % (attr_value, type(attr_value)))
 
 
 if __name__ == '__main__':
     import json
-    print json.dumps(ast2json(parse(open(__file__, "r").read())), indent=4)
+    print(json.dumps(ast2json(parse(open(__file__, "r").read())), indent=4))
