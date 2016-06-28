@@ -7,7 +7,7 @@ import ast2json
 
 class TestApi(unittest.TestCase):
     def test_run(self):
-        with open('./ast2json.py', 'rt') as f:
+        with open('./test/samples/one_function.py', 'rt') as f:
             j = ast2json.ast2json(ast.parse(f.read()))
 
         self.assertTrue(j)

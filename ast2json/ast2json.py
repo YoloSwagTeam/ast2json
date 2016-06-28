@@ -26,7 +26,7 @@
 
 from _ast import AST
 from ast import parse
-import config
+from .config import *
 
 
 def ast2json(node):
@@ -48,7 +48,7 @@ def str2json(string):
 def get_value(attr_value):
     if attr_value is None:
         return attr_value
-    if isinstance(attr_value, config.BUILTIN_TYPES):
+    if isinstance(attr_value, BUILTIN_TYPES):
         return attr_value
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
