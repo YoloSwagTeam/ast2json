@@ -50,6 +50,8 @@ def get_value(attr_value):
         return attr_value
     if isinstance(attr_value, BUILTIN_TYPES):
         return attr_value
+    if isinstance(attr_value, BUILTIN_NONE_JSON_TYPE):
+        return attr_value.decode('utf-8')
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
