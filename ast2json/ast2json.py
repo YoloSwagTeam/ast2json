@@ -27,6 +27,7 @@
 from _ast import AST
 from ast import parse
 from .config import *
+import codecs
 
 
 def ast2json(node):
@@ -51,7 +52,10 @@ def get_value(attr_value):
     if isinstance(attr_value, BUILTIN_TYPES):
         return attr_value
     if isinstance(attr_value, BUILTIN_NONE_JSON_TYPE):
-        return attr_value.decode('utf-8')
+        try:
+            return attr_value.decode('utf-8')
+        except:
+            return codecs.getencoder('hex_codec')(attr_value)[0].decode('utf-8')
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
