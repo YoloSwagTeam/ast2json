@@ -1,0 +1,15 @@
+t = complex(1j)
+t = bytes('\xff')
+t = bytes('\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff')
+t = b'\xff'
+t = b'hello'
+t = str('hello')
+t = ''
+t = float(1)
+t = int(1)
+t = long(1)
+t = None
+t = False
+t = True
+t = ['hello']
+t = {'hello':'zirony'}

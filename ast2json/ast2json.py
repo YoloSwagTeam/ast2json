@@ -49,13 +49,15 @@ def str2json(string):
 def get_value(attr_value):
     if attr_value is None:
         return attr_value
-    if isinstance(attr_value, BUILTIN_TYPES):
+    if isinstance(attr_value, BUILTIN_PURE):
         return attr_value
-    if isinstance(attr_value, BUILTIN_NONE_JSON_TYPE):
+    if isinstance(attr_value, BUILTIN_BYTES):
         try:
             return attr_value.decode('utf-8')
         except:
             return codecs.getencoder('hex_codec')(attr_value)[0].decode('utf-8')
+    if isinstance(attr_value, complex):
+        return str(attr_value)
     if isinstance(attr_value, list):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):

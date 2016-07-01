@@ -1,8 +1,9 @@
 import sys
 
 if sys.version_info.major == 2:
-    BUILTIN_TYPES = (int, basestring, float, long, complex, bool)
+    BUILTIN_PURE = (int, basestring, float, long, bool)
+    BUILTIN_BYTES = (bytearray, bytes)
 else:
-    BUILTIN_TYPES = (int, str, float, complex, bool)
+    BUILTIN_PURE = (int, str, float, bool)
+    BUILTIN_BYTES = (bytearray, bytes)
 
-BUILTIN_NONE_JSON_TYPE = (bytearray, bytes)
