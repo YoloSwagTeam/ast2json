@@ -23,11 +23,10 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
 from _ast import AST
 from ast import parse
-from .config import *
-import codecs
+from .types import BUILTIN_PURE, BUILTIN_STR, BUILTIN_BYTES
+from .types import decode_bytes, decode_str
 
 
 def ast2json(node):
@@ -38,7 +37,6 @@ def ast2json(node):
         if attr.startswith("_"):
             continue
         to_return[attr] = get_value(getattr(node, attr))
-
     return to_return
 
 
@@ -52,10 +50,9 @@ def get_value(attr_value):
     if isinstance(attr_value, BUILTIN_PURE):
         return attr_value
     if isinstance(attr_value, BUILTIN_BYTES):
-        try:
-            return attr_value.decode('utf-8')
-        except:
-            return codecs.getencoder('hex_codec')(attr_value)[0].decode('utf-8')
+        return decode_bytes(attr_value)
+    if isinstance(attr_value, BUILTIN_STR):
+        return decode_str(attr_value)
     if isinstance(attr_value, complex):
         return str(attr_value)
     if isinstance(attr_value, list):
