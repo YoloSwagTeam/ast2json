@@ -61,6 +61,14 @@ This is the result of converting 'print "Hello World!"' (and applying json.dumps
     }
 
 
+Changelog
+=========
+
+0.2 (2016-09-03)
+----------------
+
+* python 3 support and some unit testing by Juncheol Cho @zironycho
+
 Licence
 =======
 
