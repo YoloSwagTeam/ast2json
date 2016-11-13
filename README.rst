@@ -64,6 +64,11 @@ This is the result of converting 'print "Hello World!"' (and applying json.dumps
 Changelog
 =========
 
+0.2.1 (2016-11-13)
+----------------
+
+* fix broken pip installation by @abolger
+
 0.2 (2016-09-03)
 ----------------
 
