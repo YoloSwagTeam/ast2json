@@ -59,6 +59,8 @@ def get_value(attr_value):
         return [get_value(x) for x in attr_value]
     if isinstance(attr_value, AST):
         return ast2json(attr_value)
+    if isinstance(attr_value, type(Ellipsis)):
+        return '...'
     else:
         raise Exception("unknown case for '%s' of type '%s'" % (attr_value, type(attr_value)))
 
