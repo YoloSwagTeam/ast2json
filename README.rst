@@ -32,6 +32,13 @@ If you are lazy, "str2json" will apply the "parse" method of ast on a string for
 
     >>> str2json(open('some_python_source_file.py').read())
 
+You can also run via the command line to parse Python source from stdin and print to stdout:
+
+::
+
+    $ ast2json < some_python_source_file.py
+
+
 Example
 =======
 
