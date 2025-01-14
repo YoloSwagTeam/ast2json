@@ -23,6 +23,7 @@
 # ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+import sys
 from _ast import AST
 from ast import parse
 from .types import BUILTIN_PURE, BUILTIN_STR, BUILTIN_BYTES
@@ -65,6 +66,10 @@ def get_value(attr_value):
         raise Exception("unknown case for '%s' of type '%s'" % (attr_value, type(attr_value)))
 
 
+def main(stream=sys.stdin):
+    print(json.dumps(ast2json(parse(stream.read())), indent=4))
+
+
 if __name__ == '__main__':
-    import json
-    print(json.dumps(ast2json(parse(open(__file__, "r").read())), indent=4))
+    with open(__file__, "r") as f:
+        main(f)
