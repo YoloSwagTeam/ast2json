@@ -22,6 +22,11 @@ setup(name='ast2json',
       keywords='ast',
       packages=find_packages(),
       install_requires=[],
+      entry_points={
+          'console_scripts': [
+              'ast2json = ast2json.ast2json:main',
+          ]
+      },
       # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
                    # How mature is this project? Common values are
